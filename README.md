@@ -1,0 +1,1 @@
+# pyinstaller-py3.8
