@@ -1,1 +1,1 @@
-# pyinstaller-py3.8
+# pyinstaller-py3.7
