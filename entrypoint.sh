@@ -65,8 +65,14 @@ fi
 
 RENAME=${6:-$DEF_FILE_NAME}
 
-
-ls $FILE_DIR | echo "::set-output name=location::le"
-ls $FILE_DIR | echo "::set-output name=filename::$DEF_FILE_NAME"
-echo "::set-output name=content_type::$(ls ./dist/linux/$TYPE | file --mime-type $FILE_DIR/$(< /dev/stdin) | awk '//{ print $2 }')"
-mv $FILE_DIR/$DEF_FILE_NAME $FILE_DIR/$RENAME
+if [ $FILES_COUNT = 1 ]
+then
+    ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR/$(< /dev/stdin)"
+    ls $FILE_DIR | echo "::set-output name=filename::$DEF_FILE_NAME"
+    echo "::set-output name=content_type::$(ls ./dist/linux/$TYPE | file --mime-type $FILE_DIR/$(< /dev/stdin) | awk '//{ print $2 }')"
+    mv $FILE_DIR/$DEF_FILE_NAME $FILE_DIR/$RENAME
+else
+    ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR"
+    ls $FILE_DIR | echo "::set-output name=filename::NULL"
+    echo "::set-output name=content_type::NULL"
+fi
