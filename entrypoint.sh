@@ -67,10 +67,10 @@ RENAME=${6:-$DEF_FILE_NAME}
 
 if [ $FILES_COUNT = 1 ]
 then
+    mv $FILE_DIR/$DEF_FILE_NAME $FILE_DIR/$RENAME
     ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR/$(< /dev/stdin)"
     ls $FILE_DIR | echo "::set-output name=filename::$DEF_FILE_NAME"
-    echo "::set-output name=content_type::$(ls ./dist/linux/$TYPE | file --mime-type $FILE_DIR/$(< /dev/stdin) | awk '//{ print $2 }')"
-    mv $FILE_DIR/$DEF_FILE_NAME $FILE_DIR/$RENAME
+    echo "::set-output name=content_type::$(ls $FILE_DIR | file --mime-type $FILE_DIR/$(< /dev/stdin) | awk '//{ print $2 }')"
 else
     ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR"
     ls $FILE_DIR | echo "::set-output name=filename::NULL"
