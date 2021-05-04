@@ -20,6 +20,8 @@ WORKDIR=${SRCDIR:-/src}
 SPEC_FILE=${4:-*.spec}
 
 TYPE=win64
+FILE_DIR=dist/windows/$TYPE
+
 
 python -m pip install --upgrade pip wheel setuptools
 
@@ -48,13 +50,29 @@ if [ -f $5 ]; then
 fi # [ -f $5 ]
 
 
-pyinstaller --clean -y --dist ./dist/windows/$TYPE --workpath /tmp $SPEC_FILE
-chown -R --reference=. ./dist/windows/$TYPE
+pyinstaller --clean -y --dist $FILE_DIR --workpath /tmp $SPEC_FILE
+chown -R --reference=. $FILE_DIR
 
 
 apt-get install -y file
 
-ls ./dist/windows/$TYPE | echo "::set-output name=location::$WORKDIR/dist/windows/$TYPE/$(< /dev/stdin)"
-ls ./dist/windows/$TYPE | echo "::set-output name=filename::$(< /dev/stdin)"
+FILES_COUNT=`ls $FILE_DIR | wc -l`
 
-echo "::set-output name=content_type::$(ls ./dist/windows/$TYPE | file --mime-type ./dist/windows/$TYPE/$(< /dev/stdin) | awk '//{ print $2 }')"
+if [ $FILES_COUNT = 1 ]
+then
+    DEF_FILE_NAME=`ls $FILE_DIR`
+fi
+
+RENAME=${6:-$DEF_FILE_NAME}
+
+if [ $FILES_COUNT = 1 ]
+then
+    mv $FILE_DIR/$DEF_FILE_NAME $FILE_DIR/$RENAME
+    ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR/$(< /dev/stdin)"
+    ls $FILE_DIR | echo "::set-output name=filename::$DEF_FILE_NAME"
+    echo "::set-output name=content_type::$(ls ./dist/linux/$TYPE | file --mime-type $FILE_DIR/$(< /dev/stdin) | awk '//{ print $2 }')"
+else
+    ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR"
+    ls $FILE_DIR | echo "::set-output name=filename::NULL"
+    echo "::set-output name=content_type::NULL"
+fi
