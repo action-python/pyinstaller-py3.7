@@ -21,6 +21,8 @@ SPEC_FILE=${4:-*.spec}
 
 TYPE=amd64
 
+FILE_DIR=dist/linux/$TYPE
+
 /root/.pyenv/shims/python -m pip install --upgrade pip wheel setuptools
 
 #
@@ -29,8 +31,6 @@ TYPE=amd64
 #
 if [[ "$PYPI_URL" != "https://pypi.python.org/" ]] || \
    [[ "$PYPI_INDEX_URL" != "https://pypi.python.org/simple" ]]; then
-    # the funky looking regexp just extracts the hostname, excluding port
-    # to be used as a trusted-host.
     mkdir -p /root/.pip
     echo "[global]" > /root/.pip/pip.conf
     echo "index = $PYPI_URL" >> /root/.pip/pip.conf
@@ -47,14 +47,30 @@ if [ -f $5 ]; then
     /root/.pyenv/shims/pip install -r $5
 fi # [ -f $5 ]
 
-/root/.pyenv/shims/pyinstaller --clean -y --dist ./dist/linux/$TYPE --workpath /tmp $SPEC_FILE
+/root/.pyenv/shims/pyinstaller --clean -y --dist $FILE_DIR --workpath /tmp $SPEC_FILE
 
-chown -R --reference=. ./dist/linux/$TYPE
+chown -R --reference=. $FILE_DIR
 
 apt-get install -y file
 
-ls ./dist/linux/$TYPE | echo "::set-output name=location::$WORKDIR/dist/linux/$TYPE/$(< /dev/stdin)"
-ls ./dist/linux/$TYPE | echo "::set-output name=filename::$(< /dev/stdin)"
+FILES_COUNT=`ls test | wc -l`
 
-echo "::set-output name=content_type::$(ls ./dist/linux/$TYPE | file --mime-type ./dist/linux/$TYPE/$(< /dev/stdin) | awk '//{ print $2 }')"
 
+if [ $FILES_COUNT = 1 ]
+then
+    ls $FILE_DIR | DEF_FILE_NAME=$(< /dev/stdin)
+fi
+
+RENAME=${6:-$DEF_FILE_NAME}
+
+if [ $FILES_COUNT = 1 ]
+then
+    ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR/$(< /dev/stdin)"
+    ls $FILE_DIR | echo "::set-output name=filename::$DEF_FILE_NAME"
+    echo "::set-output name=content_type::$(ls ./dist/linux/$TYPE | file --mime-type $FILE_DIR/$(< /dev/stdin) | awk '//{ print $2 }')"
+    mv $FILE_DIR/$DEF_FILE_NAME $FILE_DIR/$RENAME
+else
+    ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR"
+    ls $FILE_DIR | echo "::set-output name=filename::NULL"
+    echo "::set-output name=content_type::NULL"
+fi
