@@ -65,8 +65,8 @@ fi
 
 RENAME=${6:-$DEF_FILE_NAME}
 
-mv $FILE_DIR/$DEF_FILE_NAME $FILE_DIR/$RENAME
-ls ./dist/windows/$TYPE | echo "::set-output name=location::$WORKDIR/dist/windows/$TYPE/$(< /dev/stdin)"
-ls ./dist/windows/$TYPE | echo "::set-output name=filename::$(< /dev/stdin)"
 
-echo "::set-output name=content_type::$(ls ./dist/windows/$TYPE | file --mime-type ./dist/windows/$TYPE/$(< /dev/stdin) | awk '//{ print $2 }')"
+ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR/$(< /dev/stdin)"
+ls $FILE_DIR | echo "::set-output name=filename::$DEF_FILE_NAME"
+echo "::set-output name=content_type::$(ls ./dist/linux/$TYPE | file --mime-type $FILE_DIR/$(< /dev/stdin) | awk '//{ print $2 }')"
+mv $FILE_DIR/$DEF_FILE_NAME $FILE_DIR/$RENAME
