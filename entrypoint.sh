@@ -60,7 +60,7 @@ FILES_COUNT=`ls $FILE_DIR | wc -l`
 
 if [ $FILES_COUNT = 1 ]
 then
-    ls $FILE_DIR | export DEF_FILE_NAME=$(< /dev/stdin)
+    ls $FILE_DIR | DEF_FILE_NAME=$(< /dev/stdin) | echo $DEF_FILE_NAME
 fi
 
 RENAME=${6:-$DEF_FILE_NAME}
