@@ -64,6 +64,7 @@ then
 fi
 
 RENAME=${6:-$DEF_FILE_NAME}
+echo "rename $RENAME and $DEF_FILE_NAME"
 
 if [ $FILES_COUNT = 1 ]
 then
