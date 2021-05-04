@@ -24,13 +24,17 @@ inputs:
     description: 'Specify a file path for requirements.txt file'
     required: False
     default: "requirements.txt"
+  rename:
+    description: 'Specify is pyinstaller will create single executable file?'
+    required: False
+    default: ""
 outputs:
   location:
-    description: 'Binary file location.'
+    description: 'Binary file location or Directory location.'
   filename:
-    description: 'Binary file name.'
+    description: 'Binary file name or NULL.'
   content_type:
-    description: 'File content type.'
+    description: 'File content type or NULL.'
 
 runs:
   using: "docker"
@@ -41,3 +45,4 @@ runs:
     - ${{ inputs.pypi_index_url }}
     - ${{ inputs.spec }}
     - ${{ inputs.requirements }}
+    - ${{ inputs.rename }}

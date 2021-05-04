@@ -20,6 +20,8 @@ WORKDIR=${SRCDIR:-.}
 SPEC_FILE=${4:-*.spec}
 
 TYPE=i386
+FILE_DIR=dist/linux/$TYPE
+
 
 /root/.pyenv/shims/python -m pip install --upgrade pip wheel setuptools
 
@@ -47,14 +49,29 @@ if [ -f $5 ]; then
     /root/.pyenv/shims/pip install -r $5
 fi # [ -f requirements.txt ]
 
-/root/.pyenv/shims/pyinstaller --clean -y --dist ./dist/linux/$TYPE --workpath /tmp $SPEC_FILE
+/root/.pyenv/shims/pyinstaller --clean -y --dist $FILE_DIR --workpath /tmp $SPEC_FILE
 
-chown -R --reference=. ./dist/linux/$TYPE
+chown -R --reference=. $FILE_DIR
 
 apt-get install -y file
 
-ls ./dist/linux/$TYPE | echo "::set-output name=location::$WORKDIR/dist/linux/$TYPE/$(< /dev/stdin)"
-ls ./dist/linux/$TYPE | echo "::set-output name=filename::$(< /dev/stdin)"
+FILES_COUNT=`ls $FILE_DIR | wc -l`
 
-echo "::set-output name=content_type::$(ls ./dist/linux/$TYPE | file --mime-type ./dist/linux/$TYPE/$(< /dev/stdin) | awk '//{ print $2 }')"
+if [ $FILES_COUNT = 1 ]
+then
+    DEF_FILE_NAME=`ls $FILE_DIR`
+fi
 
+RENAME=${6:-$DEF_FILE_NAME}
+
+if [ $FILES_COUNT = 1 ]
+then
+    mv $FILE_DIR/$DEF_FILE_NAME $FILE_DIR/$RENAME
+    ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR/$(< /dev/stdin)"
+    ls $FILE_DIR | echo "::set-output name=filename::$DEF_FILE_NAME"
+    echo "::set-output name=content_type::$(ls ./dist/linux/$TYPE | file --mime-type $FILE_DIR/$(< /dev/stdin) | awk '//{ print $2 }')"
+else
+    ls $FILE_DIR | echo "::set-output name=location::$WORKDIR/$FILE_DIR"
+    ls $FILE_DIR | echo "::set-output name=filename::NULL"
+    echo "::set-output name=content_type::NULL"
+fi
