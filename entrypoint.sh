@@ -58,6 +58,8 @@ apt-get install -y file
 
 FILES_COUNT=`ls $FILE_DIR | wc -l`
 
+ls -ls $FILE_DIR
+
 if [ $FILES_COUNT = 1 ]
 then
     ls $FILE_DIR | DEF_FILE_NAME=$(< /dev/stdin) | echo $DEF_FILE_NAME
