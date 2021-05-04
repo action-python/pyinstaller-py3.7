@@ -53,7 +53,7 @@ chown -R --reference=. $FILE_DIR
 
 apt-get install -y file
 
-FILES_COUNT=`ls test | wc -l`
+FILES_COUNT=`ls $FILE_DIR | wc -l`
 
 echo $FILE_DIR
 
