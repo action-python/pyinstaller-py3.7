@@ -55,6 +55,7 @@ apt-get install -y file
 
 FILES_COUNT=`ls test | wc -l`
 
+echo $FILE_DIR
 
 if [ $FILES_COUNT = 1 ]
 then
@@ -62,6 +63,10 @@ then
 fi
 
 RENAME=${6:-$DEF_FILE_NAME}
+
+echo $FILE_DIR
+echo $RENAME
+
 
 if [ $FILES_COUNT = 1 ]
 then
