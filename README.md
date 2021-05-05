@@ -58,7 +58,7 @@ jobs:
 
     - name: PyInstaller Linux amd64
       id: amd64
-      uses: action-python/pyinstaller-py3.8@amd64
+      uses: action-python/pyinstaller-py3.7@amd64
       with:
         path: .
 
