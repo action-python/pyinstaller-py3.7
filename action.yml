@@ -25,7 +25,7 @@ inputs:
     required: False
     default: "requirements.txt"
   rename:
-    description: 'Specify is pyinstaller will create single executable file?'
+    description: 'Rename the binary file, this will only work when you have --onefile binary.'
     required: False
     default: ""
 outputs:
