@@ -1,4 +1,4 @@
-name: "PyInstaller Linux WIN64"
+name: "Python3.7 PyInstaller Linux WIN64"
 description: "GitHub Action package, Your python code to Binary for Linux WIN64 Architecture"
 branding:
   icon: "box"
