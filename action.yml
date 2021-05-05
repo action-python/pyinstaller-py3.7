@@ -1,4 +1,4 @@
-name: "PyInstaller Linux AMD64"
+name: "Python3.7 PyInstaller Linux AMD64"
 description: "GitHub Action package, Your python code to Binary for Linux AMD64 Architecture"
 branding:
   icon: "box"
