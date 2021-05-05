@@ -1,8 +1,8 @@
 name: "Python3.7 PyInstaller Linux WIN64"
 description: "GitHub Action package, Your python code to Binary for Linux WIN64 Architecture"
 branding:
-  icon: "box"
-  color: "blue"
+  icon: "package"
+  color: "purple"
 inputs:
   path:
     description: "Directory containing source code & .spec file (optional requirements.txt)."
