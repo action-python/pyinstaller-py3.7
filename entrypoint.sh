@@ -53,9 +53,6 @@ fi # [ -f $5 ]
 pyinstaller --clean -y --dist $FILE_DIR --workpath /tmp $SPEC_FILE
 chown -R --reference=. $FILE_DIR
 
-
-apt-get install -y file
-
 FILES_COUNT=`ls $FILE_DIR | wc -l`
 
 if [ $FILES_COUNT = 1 ]
@@ -74,7 +71,7 @@ if [ $FILES_COUNT = 1 ]
 then
     echo "::set-output name=location::$WORKDIR/$FILE_DIR/$RENAME"
     echo "::set-output name=filename::$RENAME"
-    echo "::set-output name=content_type::$(ls $FILE_DIR | file --mime-type $FILE_DIR/$(< /dev/stdin) | awk '//{ print $2 }')"
+    echo "::set-output name=content_type::$(file --mime-type $FILE_DIR/$RENAME | awk '//{ print $2 }')"
 else
     echo "::set-output name=location::$WORKDIR/$FILE_DIR"
     echo "::set-output name=filename::NULL"
