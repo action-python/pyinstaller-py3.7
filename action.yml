@@ -1,4 +1,4 @@
-name: "PyInstaller Linux i386"
+name: "Python3.7 PyInstaller Linux i386"
 description: "GitHub Action package, Your python code to Binary for Linux i386 Architecture"
 branding:
   icon: "box"
