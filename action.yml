@@ -1,8 +1,8 @@
 name: "Python3.7 PyInstaller Linux AMD64"
 description: "GitHub Action package, Your python code to Binary for Linux AMD64 Architecture"
 branding:
-  icon: "box"
-  color: "blue"
+  icon: "package"
+  color: "purple"
 inputs:
   path:
     description: "Directory containing source code & .spec file (optional requirements.txt)."
